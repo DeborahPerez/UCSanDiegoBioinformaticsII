@@ -19,21 +19,27 @@ import sys
 # @return Eulerian cycle
 # ----------------------------------------------------------------------
 def construct_eulerian_cycle(gMap):
-    node = [next(iter(gMap))]
+    node = next(iter(gMap))
+    gMapKeys = gMap.keys()
     cycle = []
-    for i in node:
-        cycle.append(i)
+    cycle.append(node)
     print (node, cycle, gMap)
-    while len(gMap) > 0:
-        edges = gMap[node[0][0]]
-        nextNode = edges[0]
-        cycle.append(nextNode)
-        if len(edges) == 1:
-            del gMap[node[0]]
-        else:
-            del edges[0]
-
+    for key in gMapKeys:
+        if node == key:
+            step = gMap[node]
+            print (node, gMap[node], len(step))
+            if len(step) > 1:
+                cycle.append(step[0])
+                del gMap[node][0]
+                node = step[0]
+            else:
+                cycle.append(", ".join(step))
+                del gMap[node]
+                node = step
+    print (gMap)
     return cycle
+
+# RuntimeError: dictionary changed size during iteration
 # ----------------------------------------------------------------------
 # ---MAINCODE-----------------------------------------------------------
 rawgMap = sys.stdin.read().splitlines()
