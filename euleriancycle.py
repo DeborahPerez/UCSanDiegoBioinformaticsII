@@ -9,7 +9,7 @@
 #       Cycles - Step 2
 #-----------------------------------------------------------------------
 #   CREATED BY: Deborah Perez
-#   VERSION:    20160619
+#   VERSION:    20160708
 ########################################################################
 import sys
 # ---construct_eulerian_cycle-------------------------------------------
@@ -22,15 +22,11 @@ def construct_eulerian_cycle(gMap):
     node = next(iter(gMap))
     cycle = []
     cycle.append(node)
-    print (node, cycle, gMap)
-    while True:
-        if len(gMap) < 1:
-            break
+    while len(gMap) > 0:
+        print (node, cycle, gMap)
         if node in gMap:
             step = gMap[node][0]
-            print (node, step, gMap[node], len(step), len(gMap))
-        else:
-            break
+            print (cycle, node, step, gMap[node], len(gMap))
             if len(step) > 1:
                 cycle.append(step[0])
                 del gMap[node][0]
@@ -38,11 +34,13 @@ def construct_eulerian_cycle(gMap):
             else:
                 cycle.append(", ".join(step))
                 del gMap[node]
+        else:
+            break
         node = ", ".join(step)
-    print (gMap, len(gMap))
+    print (len(gMap))
     return cycle
 
-# RuntimeError: dictionary changed size during iteration
+# loop is infinite
 # ----------------------------------------------------------------------
 # ---MAINCODE-----------------------------------------------------------
 rawgMap = sys.stdin.read().splitlines()
