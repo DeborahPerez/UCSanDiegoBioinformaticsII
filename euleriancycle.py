@@ -9,7 +9,7 @@
 #       Cycles - Step 2
 #-----------------------------------------------------------------------
 #   CREATED BY: Deborah Perez
-#   VERSION:    20160727
+#   VERSION:    20160714
 ########################################################################
 import sys
 # ---construct_eulerian_cycle-------------------------------------------
@@ -41,7 +41,7 @@ def construct_eulerian_cycle(gMap):
                 edge = step
                 del gMap[node]
                 node = (", ".join(edge))
-#In the case that gMap is not empty but node is not in gMap, we will traverse
+#In the case that gMap is not empty and node is not in gMap, we will traverse
 #the cycle and choose an index existing in gMap and continue from there
         else:
             for i in range(len(cycle) - 1):
@@ -53,7 +53,7 @@ def construct_eulerian_cycle(gMap):
                     print ("cutOffPoint", cutOffPoint)
                     node = startPoint
 #Before deleting part of cycle, find way to add keys and values back to dictionary
-            del cycle[-int(cutOffPoint):]
+            del cycle[int(cutOffPoint) + 1 :]
 
 
 
