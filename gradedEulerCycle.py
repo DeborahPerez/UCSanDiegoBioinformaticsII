@@ -22,15 +22,13 @@ def construct_eulerian_cycle(gMap):
     node = next(iter(gMap))
     cycle = []
     cycle.append(node)
-    print (gMap)
+
 # while loop for gMap with existing contents
     while len(gMap) > 0:
-        print ("Gmap Length: ", len(gMap), "\nNode: ", node, "\nCycle: ", cycle, "\ngMap", gMap)
         if node in gMap:
             steps = gMap[node]
             step = steps[0]
             cycle.append(step)
-            print ("\nsteps: ", steps)
 #dictionary deletion mechanism
             if len(steps) > 1:
                 del gMap[node][0]
@@ -41,35 +39,21 @@ def construct_eulerian_cycle(gMap):
 #the cycle and choose an index existing in gMap and continue from there
         else:
             for i in range(len(cycle) - 1):
-                print ("i:", i, "\nlength of cycle:", len(cycle), "\ncycle[i]", cycle[i])
                 startPoint = cycle[i]
                 if startPoint in gMap:
-                    print ("i:", i, "\nstartPoint(value):", startPoint)
                     cutOffPoint = i
-                    print ("cutOffPoint(index):", cutOffPoint)
                     node = startPoint
 #record last edge to compare to current cycle
-            lastEdge = cycle[len(cycle)-1]
-            print ('lastEdge:', lastEdge)
+            lastEdge = cycle[len(cycle) - 1]
 
 #Modification and rearragement of cycle
             newCycle = []
             for edge in cycle[cutOffPoint:]:
-                print ('append to new cycle:', edge)
                 newCycle.append(edge)
             for moreEdge in cycle[1:cutOffPoint + 1]:
-                print('continue appending to new cycle:', moreEdge)
                 newCycle.append(moreEdge)
             cycle = newCycle
-            print ('cycle:', cycle, '\nnewCycle:', newCycle)
 
-
-
-
-
-
-    print (len(gMap), gMap)
-    print ('Correct answer', '6->8->7->9->6->5->4->2->1->0->3->2->6')
     return cycle
 
 # ----------------------------------------------------------------------
@@ -84,7 +68,7 @@ for i in range(len(rawgMap)):
         moreNodes = nodes[j].split(delimiter)
         gMap[nodes[0]] = moreNodes
 cycle = construct_eulerian_cycle(gMap)
-print ('My Anwer:', "->".join(cycle))
+print ("->".join(cycle))
 # ----------------------------------------------------------------------
 # sample output
 # 6->8->7->9->6->5->4->2->1->0->3->2->6
