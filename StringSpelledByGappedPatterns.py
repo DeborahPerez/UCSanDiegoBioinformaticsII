@@ -15,12 +15,6 @@
 #   VERSION:    20161118
 ########################################################################
 import sys
-
-#****Continue Modifying pair kmer debruijn graph function*****
-
-
-
-
 # ---string_spelled_by_g_p----------------------------------------------
 # Reconstructs a string by overlapping a prefixString and suffixString
 # through firstPatterns and secondPatterns from gapped patterns
@@ -182,38 +176,41 @@ def reconstruct_string(kmers):
 # ----------------------------------------------------------------------
 
 # ---kmer_debruijn_graph------------------------------------------------
-# Constructs a de Bruijn graph from a set of k-mers
-# @param list of kmers
-# @return deBruijn graph
+# Constructs a de Bruijn graph from a set of paired k-mers
+# @param list of paired kmers
+# @return deBruijn graph of paired kmers
 # ----------------------------------------------------------------------
 def paired_kmer_debruijn(pairedKmers):
     graphMap = {}
     prefixPRList = []
     suffixPRList = []
     for pairedKmer in pairedKmers:
-        prefixPR = []
-        suffixPR = []
+        prefixPR = ''
+        suffixPR = ''
 #        print ('pairedKmer:', pairedKmer)
         for i in range (len(pairedKmer)):
-#            print ('i:', i, '\npairedkmer of i:', pairedKmer[i], '\nprefix of pairedkmer of i:', _prefix(pairedKmer[i]))
-            prefixPR.append(_prefix(pairedKmer[i]))
-#            print ('\nsuffix of pairedkmer of i:', _suffix(pairedKmer[i]))
-            suffixPR.append(_suffix(pairedKmer[i]))
-
+            prefixPR += (_prefix(pairedKmer[i]))
+            suffixPR += (_suffix(pairedKmer[i]))
+            if i == 0:
+                prefixPR += '|'
+                suffixPR += '|'
+        graphMap[prefixPR] = suffixPR
+#    graphMap[prefixPR].append(suffixPR)
 #        print ('prefixes:', prefixPR, '\nsuffixes:', suffixPR)
 #        print ('\n')
-        prefixPRList.append(prefixPR)
-        suffixPRList.append(suffixPR)
+#        prefixPRList.append(prefixPR)
+#        suffixPRList.append(suffixPR)
 
-    print ("all prefix paired reads:", prefixPRList, '\n\n\n')
-    print ("all suffix paired reads:", suffixPRList)
+#    print ("all prefix paired reads:", prefixPRList, '\n\n\n')
+#    print ("all suffix paired reads:", suffixPRList)
 
+#    for prefixPR in prefixPRList:
 #        if prefixPR not in graphMap:
-#            graphMap[_prefix(kmer)] = [_suffix(kmer)]
+#            graphMap[prefixPR] = [_suffix(kmer)]
 #        else:
 #            graphMap[_prefix(kmer)].append(_suffix(kmer))
-    return "done"
-#    return graphMap
+#    return "done"
+    return graphMap
 # ----------------------------------------------------------------------
 # ---_prefix------------------------------------------------------------
 # @param text
