@@ -8,7 +8,7 @@
 #       Output: The linear spectrum of peptide.
 #-----------------------------------------------------------------------
 #   CREATED BY: Deborah Perez
-#   VERSION:    20170324
+#   VERSION:    20170330
 ########################################################################
 import sys
 # ---linear_spectrum----------------------------------------------------
@@ -45,19 +45,14 @@ def linear_spectrum(peptide, aminoAcidMassTable):
                 '\naminoAcidOfJ:', aminoAcidOfJ, '\nprefixOfI:', prefixOfI,
                 '\nCurrent prefixMass List:', prefixMass, '\n')
     linearSpectrum = [0]
-
-#    print ('pseudocode left to complete:\npeptideMass ← PrefixMass(|Peptide|)',
-#    '\nCyclicSpectrum ← a list consisting of the single integer 0',
-#    '\n    for i ← 0 to |Peptide| − 1',
-#    '\n        for j ← i + 1 to |Peptide|',
-#    '\n            add PrefixMass(j) − PrefixMass(i) to CyclicSpectrum',
-#    '\n            if i > 0 and j < |Peptide|',
-#    '\n                add peptideMass - (PrefixMass(j) − PrefixMass(i)) to CyclicSpectrum',
-#    '\n    return sorted list CyclicSpectrum')
-    return prefixMass
+    for i in range(len(peptide)):
+        for j in range(i + 1, len(peptide) + 1):
+            jMinusI = prefixMass[j] - prefixMass[i]
+            linearSpectrum.append(jMinusI)
+    return sorted(linearSpectrum)
 # ----------------------------------------------------------------------
 # ---MAINCODE------------------------------------------------------------
 rawData = sys.stdin.read().splitlines()
 peptide = rawData[0]
 linearSpectrum = linear_spectrum(peptide, aminoAcidMassTable)
-print (linearSpectrum)
+print (" ".join(str(x) for x in linearSpectrum))
