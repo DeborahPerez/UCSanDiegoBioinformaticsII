@@ -25,11 +25,11 @@ def cyclic_spectrum(peptide, aminoAcidMassTable):
     prefixMass.append(0)
     aminoAcidList = list(aminoAcidMassTable)
     peptideLength = len(peptide)
-    print ('amino acid list:', aminoAcidList)
-    print ('\nprefix mass list:', prefixMass,
-     '\nlength of amino acid mass table:', len(aminoAcidMassTable),
-     '\npeptide sequence:', peptide,
-     '\n---------------------------------------------------------', '\n')
+#    print ('amino acid list:', aminoAcidList)
+#    print ('\nprefix mass list:', prefixMass,
+#     '\nlength of amino acid mass table:', len(aminoAcidMassTable),
+#     '\npeptide sequence:', peptide,
+#     '\n---------------------------------------------------------', '\n')
     for i in range(1, peptideLength + 1):
         currentPeptideIndex = i-1
         aminoAcid = peptide[currentPeptideIndex]
@@ -40,30 +40,30 @@ def cyclic_spectrum(peptide, aminoAcidMassTable):
             if aminoAcidOfJ == aminoAcid:
                 prefixOfI = prefixMass[i-1] + aAMassOfJ
                 prefixMass.append(prefixOfI)
-                print ('i:', i,
-                '\nCurrent peptide index:', currentPeptideIndex,
-                '\ni minus 1:', i-1,
-                '\n prefixMass of i - 1:', prefixMass[i-1],
-                '\nAmino acid:', aminoAcid, 'aminoAcidMass:', aminoAcidMass, '\nj:', j,
-                '\naminoAcidOfJ:', aminoAcidOfJ, '\nprefixOfI:', prefixOfI,
-                '\nCurrent prefixMass List:', prefixMass, '\n')
-    print ('---------------------------------------------------------', '\n')
+#                print ('i:', i,
+#                '\nCurrent peptide index:', currentPeptideIndex,
+#                '\ni minus 1:', i-1,
+#                '\n prefixMass of i - 1:', prefixMass[i-1],
+#                '\nAmino acid:', aminoAcid, 'aminoAcidMass:', aminoAcidMass, '\nj:', j,
+#                '\naminoAcidOfJ:', aminoAcidOfJ, '\nprefixOfI:', prefixOfI,
+#                '\nCurrent prefixMass List:', prefixMass, '\n')
+#    print ('---------------------------------------------------------', '\n')
     peptideMass = prefixMass[peptideLength]
-    print ('peptide mass:', peptideMass,
-         '\n---------------------------------------------------------', '\n')
+#    print ('peptide mass:', peptideMass,
+#         '\n---------------------------------------------------------', '\n')
     cyclicSpectrum = [0]
     for i in range(peptideLength):
         for j in range(i + 1, peptideLength + 1):
             jMinusI = prefixMass[j] - prefixMass[i]
             cyclicSpectrum.append(jMinusI)
-            print ('i:', i,
-            '\nj:', j,
-            '\nprefix mass of j minus prefix mass of i:', jMinusI,
-            '\n')
+#            print ('i:', i,
+#            '\nj:', j,
+#            '\nprefix mass of j minus prefix mass of i:', jMinusI,
+#            '\n')
             if i > 0 and j < peptideLength:
                 subPeptideMass = peptideMass - jMinusI
                 cyclicSpectrum.append(subPeptideMass)
-                print ('mass of subpeptide j and i:', subPeptideMass)
+#                print ('mass of subpeptide j and i:', subPeptideMass)
     return sorted(cyclicSpectrum)
 # ----------------------------------------------------------------------
 # ---MAINCODE------------------------------------------------------------
