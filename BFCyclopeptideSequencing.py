@@ -2,8 +2,10 @@
 #   USAGE:
 #       python3 BFCyclopeptideSequencing.py
 #   DESCRIPTION:
-#       Find a possible peptide from an experimental mass spectrum
-#       using a brute force algorithm
+#       Generates all possible peptides whose mass is equal to
+#       ParentMass(Spectrum) also known as the mass of he peptide that
+#       generated the spectrum. The function then checks which of these
+#       peptides has theoretical spectra matching Spectrum
 #   BIOINFORMATICS II GENOME SEQUENCING:
 #       Input: Experimental mass spectrum
 #       Output: peptide
@@ -25,10 +27,18 @@ def BFCyclopep_seq(spectrum, aminoAcidMassTable):
     sortedSpectrum = sorted(spectrum)
     spectrumLength = len(spectrum)
     parentMass = sortedSpectrum[spectrumLength - 1]
-    for peptide in spectrum:
-        if peptide == parentMass:
-            if spectrum == cyclic_spectrum(peptide, aminoAcidMassTable):
-                 return peptide
+    aminoAcidList = list(aminoAcidMassTable)
+    print ('Mass of peptide:', parentMass, '\n\nsorted spectrum:', sortedSpectrum,
+    '\n\nlength of spectrum:', spectrumLength, '\n\namino acids list:', aminoAcidList)
+
+    for mass in spectrum:
+        for aminoAcid in aminoAcidList:
+            if aminoAcidMassTable[aminoAcid] == mass:
+                print ('mass:', mass, '\namino acid:', aminoAcid)
+                print ('\n')
+
+#            if spectrum == cyclic_spectrum(peptide, aminoAcidMassTable):
+#                 return peptide
 # ----------------------------------------------------------------------
 
 # ---cyclic_spectrum----------------------------------------------------
@@ -71,8 +81,12 @@ def cyclic_spectrum(peptide, aminoAcidMassTable):
     return sorted(cyclicSpectrum)
 # ----------------------------------------------------------------------
 # ---MAINCODE------------------------------------------------------------
-#rawData = sys.stdin.read().splitlines()
-#peptide = rawData[0]
-spectrum = [0]
+rawData = sys.stdin.read().splitlines()
+rawSpectrum = rawData[0]
+rawSpectrum = rawSpectrum.split()
+spectrum = []
+for item in rawSpectrum:
+    number = int(item)
+    spectrum.append(number)
 possiblePeptide = BFCyclopep_seq(spectrum, aminoAcidMassTable)
 print (possiblePeptide)
