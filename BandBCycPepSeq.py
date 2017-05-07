@@ -59,7 +59,7 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
     '\n\nlength of spectrum:', spectrumLength,
     '\n\namino acids list:', aminoAcidList)
 # Build empty peptides first
-    peptides = [[['empty'], [0]]]
+    peptides = []
 # Add new amino acid and corresponding masses
     for aA in aminoAcidList:
         newPair = []
@@ -93,28 +93,40 @@ def expand_pep(peptideList):
     aminoAcidList = list(aminoAcidMassTable)
     newPeptideList = []
     for pepInfo in peptideList:
-        print (pepInfo)
         pepList = pepInfo[0]
         stringPep = pepList[0]
         pepMassList = pepInfo[1]
         pepMass = pepMassList[0]
-        print ('\nPeptide List:', peptideList,
+
+        print ('\nPeptide information:', pepInfo,
         '\nIndex 1 of Peptides:', pepList,
         '\nPeptide as string:', stringPep,
         '\nIndex 2 of Masses:', pepMassList,
         '\nMass of Peptide:', pepMass)
-    return True
-#        for aA in aminoAcidList:
-#            newPair = []
-#            newPep = ''
-#            newMass = []
-#            newPep += AA
-#            newMass.append(aminoAcidMassTable[aA])
+
+        for aA in aminoAcidList:
+            newPair = []
+            newPep = []
+            newStringPep = ''
+            newStringPep += stringPep
+            newStringPep += aA
+            newPep.append(newStringPep)
+            newMass = []
+            newCalcMass = pepMass + aminoAcidMassTable[aA]
+            newMass.append(newCalcMass)
+            newPair.append(newPep)
+            newPair.append(newMass)
+            newPeptideList.append(newPair)
+            print ('new Peptide:', newStringPep,
+            '\nnew mass:', newCalcMass,
+            '\nnew pair info:', newPair)
+
 #            newPair.append(newPep)
 #            newPair.append(newMass)
 #            peptides.append(newPair)
 #        print ('\npeptides:', peptides)
-#    return newPeptideList
+    return newPeptideList
+
 # ---cyclic_spectrum----------------------------------------------------
 # Finds the cyclic spectrum of a peptide
 # @param Peptide, Table of Amino Acids and their masses
