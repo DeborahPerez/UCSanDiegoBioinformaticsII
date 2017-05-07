@@ -12,10 +12,10 @@
 #   VERSION:    20170507
 ########################################################################
 # Summary
-# 1. Experimental spectrum is "spectrum"
-# 2. Collection of candidate linear peptides is "peptides"
-# 3. Initialize "peptides" as empty
-# 4. Expand "peptides" to contain all linear peptides of length 1
+# *1. Experimental spectrum is "spectrum"
+# *2. Collection of candidate linear peptides is "peptides"
+# *3. Initialize "peptides" as empty
+# *4. Expand "peptides" to contain all linear peptides of length 1
 # 5. (Branching step) Continue step 4 process creating 18 new peptides
 #    of length k + 1 for each amino acid string in peptide of length k
 #    in "peptides" by appending all possible amino acid mass to the end
@@ -28,10 +28,10 @@
 #    part of solution for cyclopeptide sequencing problem.
 
 # Pseudocode
-# CyclopeptideSequencing(Spectrum)
-#   Peptides ← a set containing only the empty peptide
-#   while Peptides is nonempty
-#       Peptides ← Expand(Peptides)
+# *CyclopeptideSequencing(Spectrum)
+#   *Peptides ← a set containing only the empty peptide
+#   *while Peptides is nonempty
+#       *Peptides ← Expand(Peptides)
 #       for each peptide Peptide in Peptides
 #           if Mass(Peptide) = ParentMass(Spectrum)
 #               if Cyclospectrum(Peptide) = Spectrum
@@ -54,10 +54,12 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
     spectrumLength = len(spectrum)
     parentMass = sortedSpectrum[spectrumLength - 1]
     aminoAcidList = list(aminoAcidMassTable)
-    print ('Mass of peptide:', parentMass,
-    '\n\nsorted spectrum:', sortedSpectrum,
-    '\n\nlength of spectrum:', spectrumLength,
-    '\n\namino acids list:', aminoAcidList)
+    possiblePeptides = []
+
+#    print ('Mass of peptide:', parentMass,
+#    '\n\nsorted spectrum:', sortedSpectrum,
+#    '\n\nlength of spectrum:', spectrumLength,
+#    '\n\namino acids list:', aminoAcidList)
 # Build empty peptides first
     peptides = []
 # Add new amino acid and corresponding masses
@@ -70,16 +72,28 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
         newPair.append(newAA)
         newPair.append(newMass)
         peptides.append(newPair)
+# List of initialized candidate linear peptides
     print ('\npeptides:', peptides)
-# Print amino acid from peptides list
-    for pepInfo in peptides:
-        expandedPep = pepInfo[0]
-        expandedPepMass = pepInfo[1]
-        print ('\nExpanded peptide:', expandedPep,
-        '\nExpanded peptide mass:', expandedPepMass)
-
-    peptideExpansion = expand_pep(peptides)
-    print (peptideExpansion)
+    lenPeptides = len(peptides)
+    if lenPeptides > 0:
+# Bound step
+        boundPeptides = []
+        for pepInfo in peptides:
+            pepList = pepInfo[0]
+            stringPep = pepList[0]
+            pepMassList = pepInfo[1]
+            pepMass = pepMassList[0]
+            if pepMass in spectrum:
+                print (True)
+                boundPeptides.append(pepInfo)
+                if pepMass == parentMass:
+                    if cyclic_spectrum(stringPep) == sortedSpectrum:
+                        possiblePeptides.append(stringPep)
+                        return possiblePeptides
+        print ('\nbound peptides:', boundPeptides)
+# Branch step
+        peptides = expand_pep(boundPeptides)
+        print (peptides)
 
 # Find a way to modify  peptides list using expand_pep function
 
@@ -98,11 +112,11 @@ def expand_pep(peptideList):
         pepMassList = pepInfo[1]
         pepMass = pepMassList[0]
 
-        print ('\nPeptide information:', pepInfo,
-        '\nIndex 1 of Peptides:', pepList,
-        '\nPeptide as string:', stringPep,
-        '\nIndex 2 of Masses:', pepMassList,
-        '\nMass of Peptide:', pepMass)
+#        print ('\nPeptide information:', pepInfo,
+#        '\nIndex 1 of Peptides:', pepList,
+#        '\nPeptide as string:', stringPep,
+#        '\nIndex 2 of Masses:', pepMassList,
+#        '\nMass of Peptide:', pepMass)
 
         for aA in aminoAcidList:
             newPair = []
@@ -117,14 +131,11 @@ def expand_pep(peptideList):
             newPair.append(newPep)
             newPair.append(newMass)
             newPeptideList.append(newPair)
-            print ('new Peptide:', newStringPep,
-            '\nnew mass:', newCalcMass,
-            '\nnew pair info:', newPair)
 
-#            newPair.append(newPep)
-#            newPair.append(newMass)
-#            peptides.append(newPair)
-#        print ('\npeptides:', peptides)
+#            print ('new Peptide:', newStringPep,
+#            '\nnew mass:', newCalcMass,
+#            '\nnew pair info:', newPair)
+
     return newPeptideList
 
 # ---cyclic_spectrum----------------------------------------------------
