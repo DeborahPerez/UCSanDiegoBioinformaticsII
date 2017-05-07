@@ -9,10 +9,38 @@
 #       Output: Possible peptides
 #-----------------------------------------------------------------------
 #   CREATED BY: Deborah Perez
-#   VERSION:    20170427
+#   VERSION:    20170507
 ########################################################################
+# Summary
+# 1. Experimental spectrum is "spectrum"
+# 2. Collection of candidate linear peptides is "peptides"
+# 3. Initialize "peptides" as empty
+# 4. Expand "peptides" to contain all linear peptides of length 1
+# 5. (Branching step) Continue step 4 process creating 18 new peptides
+#    of length k + 1 for each amino acid string in peptide of length k
+#    in "peptides" by appending all possible amino acid mass to the end
+#    of peptide
+# 6. (Bound step) For every expansion step of "peptides", trim "peptides"
+#    by keeping only linear peptides consistent with experimental
+#    "spectrum"
+# 7. For every trim, check if new linear peptides have mass equal to
+#    mass in the spectrum. If yes, circularize peptide and check if it
+#    part of solution for cyclopeptide sequencing problem.
+
+# Pseudocode
+# CyclopeptideSequencing(Spectrum)
+#   Peptides ← a set containing only the empty peptide
+#   while Peptides is nonempty
+#       Peptides ← Expand(Peptides)
+#       for each peptide Peptide in Peptides
+#           if Mass(Peptide) = ParentMass(Spectrum)
+#               if Cyclospectrum(Peptide) = Spectrum
+#                   output Peptide
+#               remove Peptide from Peptides
+#           else if Peptide is not consistent with Spectrum
+#               remove Peptide from Peptides
 import sys
-# ---b_BCycPepSeq----------------------------------------------------
+# ---bnb_cyc_pep_seq----------------------------------------------------
 # Finds a peptide from a spectrum of masses using brute force
 # @param spectrum of masses
 # @return peptide
@@ -42,11 +70,16 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
         newPair.append(newAA)
         newPair.append(newMass)
         peptides.append(newPair)
-    print (peptides)
+    print ('\npeptides:', peptides)
 # Print amino acid from peptides list
-    for pepItem in peptides:
-        pepItemAA = pepItem[0]
-        print (pepItemAA)
+    for pepInfo in peptides:
+        expandedPep = pepInfo[0]
+        expandedPepMass = pepInfo[1]
+        print ('\nExpanded peptide:', expandedPep,
+        '\nExpanded peptide mass:', expandedPepMass)
+
+    peptideExpansion = expand_pep(peptides)
+    print (peptideExpansion)
 
 # Find a way to modify  peptides list using expand_pep function
 
@@ -59,12 +92,29 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
 def expand_pep(peptideList):
     aminoAcidList = list(aminoAcidMassTable)
     newPeptideList = []
-    for peptide in peptideList:
-        for aA in aminoAcidList:
-            newPeptide = []
-            newPeptide.append(peptide)
-            newPeptide.append(aA)
-    return newPeptideList
+    for pepInfo in peptideList:
+        print (pepInfo)
+        pepList = pepInfo[0]
+        stringPep = pepList[0]
+        pepMassList = pepInfo[1]
+        pepMass = pepMassList[0]
+        print ('\nPeptide List:', peptideList,
+        '\nIndex 1 of Peptides:', pepList,
+        '\nPeptide as string:', stringPep,
+        '\nIndex 2 of Masses:', pepMassList,
+        '\nMass of Peptide:', pepMass)
+    return True
+#        for aA in aminoAcidList:
+#            newPair = []
+#            newPep = ''
+#            newMass = []
+#            newPep += AA
+#            newMass.append(aminoAcidMassTable[aA])
+#            newPair.append(newPep)
+#            newPair.append(newMass)
+#            peptides.append(newPair)
+#        print ('\npeptides:', peptides)
+#    return newPeptideList
 # ---cyclic_spectrum----------------------------------------------------
 # Finds the cyclic spectrum of a peptide
 # @param Peptide, Table of Amino Acids and their masses
