@@ -9,7 +9,7 @@
 #       Output: Possible peptides
 #-----------------------------------------------------------------------
 #   CREATED BY: Deborah Perez
-#   VERSION:    20170507
+#   VERSION:    20170508
 ########################################################################
 # Summary
 # *1. Experimental spectrum is "spectrum"
@@ -75,7 +75,7 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
 # List of initialized candidate linear peptides
     print ('\npeptides:', peptides)
     lenPeptides = len(peptides)
-    if lenPeptides > 0:
+    while lenPeptides > 0:
 # Bound step
         boundPeptides = []
         for pepInfo in peptides:
@@ -93,7 +93,8 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
         print ('\nbound peptides:', boundPeptides)
 # Branch step
         peptides = expand_pep(boundPeptides)
-        print (peptides)
+        for peptideItem in peptides:
+            print (peptideItem)
 
 # Find a way to modify  peptides list using expand_pep function
 
@@ -143,11 +144,11 @@ def expand_pep(peptideList):
 # @param Peptide, Table of Amino Acids and their masses
 # @return cyclic spectrum of the peptide
 # ----------------------------------------------------------------------
-aminoAcidMassTable = {'G': 57, 'A': 71, 'S': 87, 'P': 97, 'V': 99,
-                      'T': 101, 'C': 103, 'I': 113, 'L': 113, 'N': 114,
-                      'D': 115, 'K': 128, 'Q': 128, 'E': 129, 'M': 131,
-                      'H': 137, 'F': 147, 'R': 156, 'Y': 163, 'W': 186}
-def cyclic_spectrum(peptide, aminoAcidMassTable):
+def cyclic_spectrum(peptide):
+    aminoAcidMassTable = {'G': 57, 'A': 71, 'S': 87, 'P': 97, 'V': 99,
+                          'T': 101, 'C': 103, 'I': 113, 'L': 113, 'N': 114,
+                          'D': 115, 'K': 128, 'Q': 128, 'E': 129, 'M': 131,
+                          'H': 137, 'F': 147, 'R': 156, 'Y': 163, 'W': 186}
     prefixMass = []
     prefixMass.append(0)
     aminoAcidList = list(aminoAcidMassTable)
