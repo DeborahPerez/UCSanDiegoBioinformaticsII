@@ -11,21 +11,26 @@
 #   CREATED BY: Deborah Perez
 #   VERSION:    20170508
 ########################################################################
+# ****Create a function to circularize chosen peptide and give
+# spectrum values****
+
 # Summary
 # *1. Experimental spectrum is "spectrum"
 # *2. Collection of candidate linear peptides is "peptides"
 # *3. Initialize "peptides" as empty
 # *4. Expand "peptides" to contain all linear peptides of length 1
-# 5. (Branching step) Continue step 4 process creating 18 new peptides
+# *5. (Branching step) Continue step 4 process creating 18 new peptides
 #    of length k + 1 for each amino acid string in peptide of length k
 #    in "peptides" by appending all possible amino acid mass to the end
 #    of peptide
-# 6. (Bound step) For every expansion step of "peptides", trim "peptides"
+# *6. (Bound step) For every expansion step of "peptides", trim "peptides"
 #    by keeping only linear peptides consistent with experimental
 #    "spectrum"
-# 7. For every trim, check if new linear peptides have mass equal to
-#    mass in the spectrum. If yes, circularize peptide and check if it
-#    part of solution for cyclopeptide sequencing problem.
+# *7. For every trim, check if new linear peptides have mass equal to
+#    mass in the spectrum.
+# 8. If mass of peptide equals mass of experimental parent, circularize
+#    peptide and check if it is part of solution for cyclopeptide
+#    sequencing problem.
 
 # Pseudocode
 # *CyclopeptideSequencing(Spectrum)
@@ -73,7 +78,8 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
         newPair.append(newMass)
         peptides.append(newPair)
 # List of initialized candidate linear peptides
-    print ('\npeptides:', peptides)
+#    print ('\npeptides:', peptides)
+
     lenPeptides = len(peptides)
     while lenPeptides > 0:
 # Bound step
@@ -84,19 +90,19 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
             pepMassList = pepInfo[1]
             pepMass = pepMassList[0]
             if pepMass in spectrum:
-                print (True)
+#                print (True)
                 boundPeptides.append(pepInfo)
                 if pepMass == parentMass:
                     if cyclic_spectrum(stringPep) == sortedSpectrum:
                         possiblePeptides.append(stringPep)
                         return possiblePeptides
-        print ('\nbound peptides:', boundPeptides)
+
+#        print ('\nbound peptides:', boundPeptides)
 # Branch step
         peptides = expand_pep(boundPeptides)
-        for peptideItem in peptides:
-            print (peptideItem)
+#        for peptideItem in peptides:
+#            print (peptideItem)
 
-# Find a way to modify  peptides list using expand_pep function
 
 # ----------------------------------------------------------------------
 # ---expand_pep---------------------------------------------------------
