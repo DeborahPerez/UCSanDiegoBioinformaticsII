@@ -9,7 +9,7 @@
 #       Output: Possible peptides
 #-----------------------------------------------------------------------
 #   CREATED BY: Deborah Perez
-#   VERSION:    20170508
+#   VERSION:    20170511
 ########################################################################
 # ****Create a function to circularize chosen peptide and give
 # spectrum values****
@@ -50,17 +50,37 @@ import sys
 # @param spectrum of masses
 # @return peptide
 # ----------------------------------------------------------------------
-aminoAcidMassTable = {'G': 57, 'A': 71, 'S': 87, 'P': 97, 'V': 99,
-                      'T': 101, 'C': 103, 'I': 113, 'L': 113, 'N': 114,
-                      'D': 115, 'K': 128, 'Q': 128, 'E': 129, 'M': 131,
-                      'H': 137, 'F': 147, 'R': 156, 'Y': 163, 'W': 186}
-def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
+def bnb_cyc_pep_seq(spectrum):
+    aminoAcidMassTable = {'G': 57, 'A': 71, 'S': 87, 'P': 97, 'V': 99,
+                          'T': 101, 'C': 103, 'I': 113, 'L': 113, 'N': 114,
+                          'D': 115, 'K': 128, 'Q': 128, 'E': 129, 'M': 131,
+                          'H': 137, 'F': 147, 'R': 156, 'Y': 163, 'W': 186}
+# Function to find a theoretical peptide match for experimental spectrum
+    theoreticalMatch = _theorPepMatch(spectrum)
+#    print (theoreticalMatch)
+
+# Function to circularize chosen peptide and give spectrum values
+    circularSequences = _circularize(theoreticalMatch)
+#    print (circularSequences)
+
+    return True
+
+
+# ----------------------------------------------------------------------
+# ---_theorPepMatch-----------------------------------------------------
+# Finds a theoretical peptide match for experimental spectrum
+# @param spectrum
+# @return Theoretical peptide match
+# ----------------------------------------------------------------------
+def _theorPepMatch(spectrum):
+    aminoAcidMassTable = {'G': 57, 'A': 71, 'S': 87, 'P': 97, 'V': 99,
+                          'T': 101, 'C': 103, 'I': 113, 'L': 113, 'N': 114,
+                          'D': 115, 'K': 128, 'Q': 128, 'E': 129, 'M': 131,
+                          'H': 137, 'F': 147, 'R': 156, 'Y': 163, 'W': 186}
     sortedSpectrum = sorted(spectrum)
     spectrumLength = len(spectrum)
     parentMass = sortedSpectrum[spectrumLength - 1]
     aminoAcidList = list(aminoAcidMassTable)
-    possiblePeptides = []
-
 #    print ('Mass of peptide:', parentMass,
 #    '\n\nsorted spectrum:', sortedSpectrum,
 #    '\n\nlength of spectrum:', spectrumLength,
@@ -79,7 +99,6 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
         peptides.append(newPair)
 # List of initialized candidate linear peptides
 #    print ('\npeptides:', peptides)
-
     lenPeptides = len(peptides)
     while lenPeptides > 0:
 # Bound step
@@ -89,20 +108,37 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
             stringPep = pepList[0]
             pepMassList = pepInfo[1]
             pepMass = pepMassList[0]
+# Branch step
             if pepMass in spectrum:
-#                print (True)
                 boundPeptides.append(pepInfo)
                 if pepMass == parentMass:
                     if cyclic_spectrum(stringPep) == sortedSpectrum:
-                        possiblePeptides.append(stringPep)
-                        return possiblePeptides
-
-#        print ('\nbound peptides:', boundPeptides)
-# Branch step
+                        return stringPep
         peptides = expand_pep(boundPeptides)
-#        for peptideItem in peptides:
-#            print (peptideItem)
+# ---_circularize---------------------------------------------------------
+# For a circular peptide of length k, finds every possible linear
+# sequence of length k forward and backward
+# @param Peptide
+# @return All possible linear sequences
+# ----------------------------------------------------------------------
+def _circularize(peptide):
+    lenPeptide = len(peptide)
+    circularizedPeps = []
+    for i in range(lenPeptide):
+        possiblePep = ''
+        if i == 0:
+            circularizedPeps.append(peptide)
+            circularizedPeps.append(peptide[::-1])
+        else:
 
+            print ('\ni:', i,
+                '\npeptide string starting at ith index to end:',
+                peptide[i:],
+                '\ncurrent circularized peptides:', circularizedPeps
+                )
+
+
+    return True
 
 # ----------------------------------------------------------------------
 # ---expand_pep---------------------------------------------------------
@@ -111,6 +147,10 @@ def bnb_cyc_pep_seq(spectrum, aminoAcidMassTable):
 # @return Expanded peptide list with their masses
 # ----------------------------------------------------------------------
 def expand_pep(peptideList):
+    aminoAcidMassTable = {'G': 57, 'A': 71, 'S': 87, 'P': 97, 'V': 99,
+                          'T': 101, 'C': 103, 'I': 113, 'L': 113, 'N': 114,
+                          'D': 115, 'K': 128, 'Q': 128, 'E': 129, 'M': 131,
+                          'H': 137, 'F': 147, 'R': 156, 'Y': 163, 'W': 186}
     aminoAcidList = list(aminoAcidMassTable)
     newPeptideList = []
     for pepInfo in peptideList:
@@ -192,5 +232,5 @@ spectrum = []
 for item in rawSpectrum:
     number = int(item)
     spectrum.append(number)
-possiblePeptide = bnb_cyc_pep_seq(spectrum, aminoAcidMassTable)
+possiblePeptide = bnb_cyc_pep_seq(spectrum)
 print (possiblePeptide)
