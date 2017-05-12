@@ -61,7 +61,7 @@ def bnb_cyc_pep_seq(spectrum):
 
 # Function to circularize chosen peptide and give spectrum values
     circularSequences = _circularize(theoreticalMatch)
-#    print (circularSequences)
+    print (circularSequences)
 
     return True
 
@@ -124,21 +124,26 @@ def _theorPepMatch(spectrum):
 def _circularize(peptide):
     lenPeptide = len(peptide)
     circularizedPeps = []
+#    print ('\npeptide:', peptide)
     for i in range(lenPeptide):
         possiblePep = ''
         if i == 0:
             circularizedPeps.append(peptide)
             circularizedPeps.append(peptide[::-1])
         else:
-
-            print ('\ni:', i,
-                '\npeptide string starting at ith index to end:',
-                peptide[i:],
-                '\ncurrent circularized peptides:', circularizedPeps
-                )
-
-
-    return True
+            str1Part = peptide[:i]
+            str2Part = peptide[i:]
+            newCircPep = str2Part + str1Part
+            circularizedPeps.append(newCircPep)
+            circularizedPeps.append(newCircPep[::-1])
+#            print ('\ni:', i,
+#                '\npeptide string starting at ith index to end:',
+#                peptide[i:],
+#                '\nwrap around text:', peptide[:i],
+#                '\nnew circularized peptide option:', newCircPep,
+#                '\ncurrent circularized peptides:', circularizedPeps
+#                )
+    return circularizedPeps
 
 # ----------------------------------------------------------------------
 # ---expand_pep---------------------------------------------------------
