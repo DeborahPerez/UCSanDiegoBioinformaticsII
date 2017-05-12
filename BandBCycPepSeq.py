@@ -9,11 +9,9 @@
 #       Output: Possible peptides
 #-----------------------------------------------------------------------
 #   CREATED BY: Deborah Perez
-#   VERSION:    20170511
+#   VERSION:    20170512
 ########################################################################
-# ****Create a function to circularize chosen peptide and give
-# spectrum values****
-
+# ****Find amino acid masses for each circularized petide option*****
 # Summary
 # *1. Experimental spectrum is "spectrum"
 # *2. Collection of candidate linear peptides is "peptides"
@@ -62,7 +60,11 @@ def bnb_cyc_pep_seq(spectrum):
 # Function to circularize chosen peptide and give spectrum values
     circularSequences = _circularize(theoreticalMatch)
     print (circularSequences)
-
+    for circularSequence in circularSequences:
+        print (circularSequence)
+        for aminoAcid in circularSequence:
+            if aminoAcid in aminoAcidMassTable:
+                print (dict.get(aminoAcid))
     return True
 
 
