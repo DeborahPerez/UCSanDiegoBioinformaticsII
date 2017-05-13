@@ -60,12 +60,15 @@ def bnb_cyc_pep_seq(spectrum):
 # Function to circularize chosen peptide and give spectrum values
     circularSequences = _circularize(theoreticalMatch)
     print (circularSequences)
+    masterMasses = []
     for circularSequence in circularSequences:
         print (circularSequence)
+        cirSeqMass = []
         for aminoAcid in circularSequence:
-            if aminoAcid in aminoAcidMassTable:
-                print (dict.get(aminoAcid))
-    return True
+            mass = aminoAcidMassTable[aminoAcid]
+            cirSeqMass.append(mass)
+        masterMasses.append(cirSeqMass)
+    return masterMasses
 
 
 # ----------------------------------------------------------------------
